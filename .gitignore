@@ -5,3 +5,4 @@ env/
 .pytest_cache
 .env
 postgres/.env
+db.sqlite3
