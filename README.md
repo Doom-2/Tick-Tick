@@ -27,10 +27,12 @@
      * Add Docker container with Postgres to project via `docker-compose.yaml`
      * Add `.env` file in the same directory and fill it with appropriate env vars 
      * Run docker service through `docker compose up -d`
-     * Check the connection via any tool you like, e.g. PyCharm Database tools or PGAdmin 
+     * Check the connection via any tool you like, e.g. PyCharm Database tools or PGAdmin
    * Add `DATABASE_URL` in `.env` file in the project root and fill it according `.env.example`
    * Reformat `settings.py` to use env vars in `DATABASES` dict according this https://django-environ.readthedocs.io/en/latest/quickstart.html
-   * Customize Django Admin panel
+   * Make migrations for `core` app by running command `./manage.py makemigrations` from the project root.
+   * Apply all migrations by running command `./manage.py migrate` from the project root.
+   * Customize Django Admin panel:
      * Make only the following fields displayed: `username`, `email`, `first_name`, `last_name`
      * Add search by the following fields: `email`, `first_name`, `last_name`, `username`
      * Add filters for the following fields: `is_staff`, `is_active`, `is_superuser`
