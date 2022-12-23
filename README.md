@@ -6,7 +6,7 @@
    * Install dependencies by running the command `poetry install` in terminal
    * Connect to DB by renaming `.env.example` files located in `./postgres` and project root dirs to `.env` and filling them with your own values
    * Run the following commands in the terminal from project root `./manage.py migrate`, `./manage.py runserver`
-   * Backend side will be available on `localhost:8000`
+   * Backend side will be available on `http://localhost:8000`
 &nbsp;
 #### 2. Project Creation Steps
 2.1 Initial setup, DB connection, Django admin customization
