@@ -17,18 +17,17 @@
    * From here on, commit changes into Git as needed
    * Create .gitignore and fill it out yourself or using the appropriate template
    * Setup configuration file:
-     * create `.env` file in project root and fill it with SECRET_KEY, DEBUG, DATABASE_URL constants
+     * create `.env` file in project root and fill it with SECRET_KEY, DEBUG constants according tips in `.env.example` file
      * reformat `settings.py` to use env vars according this https://django-environ.readthedocs.io/en/latest/quickstart.html
      * change ALLOWED_HOSTS to `["*"]`
    * Create new app `core` and register it in `settings.py`
    * Create model `User` in `models.py`, inherit it from `AbstractUser` model and put `AUTH_USER_MODEL = 'core.User'` into `settings.py`
    * Setup connection to Postgres:
-     * Create `postgres` folder in project root
-     * Add Docker container with Postgres to project via `docker-compose.yaml`
-     * Add `.env` file in the same directory and fill it with appropriate env vars according `.env.example`
+     * Add Docker container with Postgres to project via `docker-compose.yaml` in projects root
+     * Add to `.env` file DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT constants according tips in `.env.example`
      * Run docker service through `docker compose up -d`
      * Check the connection via any tool you like, e.g. PyCharm Database tools or PGAdmin
-   * Add `DATABASE_URL` in `.env` file in the project root and fill it according `.env.example`
+   * Add to `.env` file `DATABASE_URL` constant according tips in `.env.example`
    * Reformat `settings.py` to use env vars in `DATABASES` dict according this https://django-environ.readthedocs.io/en/latest/quickstart.html
    * Make migrations for `core` app by running command `./manage.py makemigrations` from the project root
    * Apply all migrations by running command `./manage.py migrate` from the project root
