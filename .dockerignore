@@ -1,0 +1,6 @@
+.gitignore
+frontend
+docker-compose.yaml
+README.md
+.env
+.env.example
