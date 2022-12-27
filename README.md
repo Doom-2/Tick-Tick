@@ -37,4 +37,25 @@
      * Add filters for the following fields: `is_staff`, `is_active`, `is_superuser`
      * Hide `password` field
      * Make fields `last_login`, `date_joined` non-editable
-&nbsp;
+
+2.2 Deploy
+* Create a Git branch 'deploy' and switch to it using command `git switch -c deploy`
+* * Add `gunicorn` and `djangorestframework` package through Poetry
+* Create Dockerfile for Django api in the project root and make sure it can build.
+  * In `CMD` instruction use `gunicorn` instead of `runserver`.
+  * In `ENTRYPOINT` instruction include script that contains applying migrations logic
+* Create `docker-compose.yaml` file in the project root and fill it using the following instructions:
+  * 3 services should be created - `db` for Postgres, `api` for Django app, `frontend` for frontend server nginx
+  * An existing image for frontend `doom2/tick-tick-frontend` should be used
+  * Use volumes for postgres, api and nginx configuration file.
+  * A volume for static should be created as well to store Django static files
+  * Api container should depend on db container, while frontend container should depend on api
+* Execute command `docker-compose up -d` and make sure that all services are started correctly
+* Crete Cloud VPS if you don't have one
+* Create DNS name using Freenom service (https://www.freenom.com)
+* Delegate the domain to hosting
+* Setup your VPS:
+  * Install Docker & Compose services
+  * Create user `deploy` with admin privileges
+  * Allow SSH connection by login and password
+* Make CI/CD pipeline using GitHub Actions platform.
