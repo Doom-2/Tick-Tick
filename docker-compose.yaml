@@ -34,9 +34,9 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "9000:9000"
+      - "8000:8000"
     healthcheck:
-      test: python3 -c 'import http.client;http.client.HTTPConnection("127.0.0.1:9000", timeout=1).request("GET", "/ping/")'
+      test: python3 -c 'import http.client;http.client.HTTPConnection("127.0.0.1:8000", timeout=1).request("GET", "/ping/")'
       interval: 3s
       timeout: 3s
       retries: 5
@@ -52,7 +52,7 @@ services:
     image: doom2/tick-tick-frontend
     restart: always
     ports:
-      - "81:80"
+      - "80:80"
     depends_on:
       api:
         condition: service_healthy
