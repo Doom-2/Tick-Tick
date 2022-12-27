@@ -37,7 +37,7 @@ jobs:
           source: "deploy/*"
           target: "Tick-tick"
           strip_components: 1
-      - name: deploy app
+      - name: deploy app with collectstastic
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -46,3 +46,5 @@ jobs:
           script: |
             cd Tick-tick
             echo ${{ secrets.PASSWORD }} | sudo -S docker compose up -d
+            echo ${{ secrets.PASSWORD }} | sudo -S docker exec -it tick-tick-api-1 \
+            bin/bash -c "./manage.py collectstatic --noinput"
