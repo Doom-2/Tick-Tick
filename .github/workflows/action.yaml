@@ -1,5 +1,8 @@
 name: CI/CD
-on: [push]
+on:
+  push:
+    tags:
+      - 'v*'
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
