@@ -3,7 +3,7 @@ MAINTAINER "Doom Guy"
 
 WORKDIR /
 
-EXPOSE 8000
+EXPOSE 9000
 
 RUN pip install "poetry"
 
