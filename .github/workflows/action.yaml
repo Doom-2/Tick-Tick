@@ -1,0 +1,53 @@
+name: CI/CD
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: docker build
+        env:
+          HOME: /Tick-tick
+        run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+      - name: docker login
+        run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+      - name: docker push
+        run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    steps:
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: decrypt .env
+        uses: anthonykgross/ansible-vault-cli-github-action@v1
+        with:
+          vault_key: ${{ secrets.VAULT_PASSWORD }}
+          command: "ansible-vault decrypt deploy/.env"
+      - name: render config
+        run: cat docker-compose-ci.yaml | envsubst '$GITHUB_REF_NAME, $GITHUB_RUN_ID' > deploy/docker-compose.yaml
+      - name: copy files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "deploy/*"
+          target: "Tick-tick"
+          strip_components: 1
+      - name: deploy app with collectstastic
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd Tick-tick
+            echo ${{ secrets.PASSWORD }} | sudo -S docker compose up -d
+            echo ${{ secrets.PASSWORD }} | sudo -S docker exec tick-tick-api-1 \
+            bin/bash -c "python3 manage.py collectstatic --noinput"
