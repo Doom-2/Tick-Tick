@@ -17,18 +17,17 @@
    * From here on, commit changes into Git as needed
    * Create .gitignore and fill it out yourself or using the appropriate template
    * Setup configuration file:
-     * create `.env` file in project root and fill it with SECRET_KEY, DEBUG, DATABASE_URL constants
+     * create `.env` file in project root and fill it with `SECRET_KEY`, `DEBUG` constants according tips in `.env.example` file
      * reformat `settings.py` to use env vars according this https://django-environ.readthedocs.io/en/latest/quickstart.html
      * change ALLOWED_HOSTS to `["*"]`
    * Create new app `core` and register it in `settings.py`
    * Create model `User` in `models.py`, inherit it from `AbstractUser` model and put `AUTH_USER_MODEL = 'core.User'` into `settings.py`
    * Setup connection to Postgres:
-     * Create `postgres` folder in project root
-     * Add Docker container with Postgres to project via `docker-compose.yaml`
-     * Add `.env` file in the same directory and fill it with appropriate env vars according `.env.example`
+     * Add Docker container with Postgres to project via `docker-compose.yaml` in projects root
+     * Add to `.env` file `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` constants according tips in `.env.example`
      * Run docker service through `docker compose up -d`
      * Check the connection via any tool you like, e.g. PyCharm Database tools or PGAdmin
-   * Add `DATABASE_URL` in `.env` file in the project root and fill it according `.env.example`
+   * Add to `.env` file `DATABASE_URL` constant according tips in `.env.example`
    * Reformat `settings.py` to use env vars in `DATABASES` dict according this https://django-environ.readthedocs.io/en/latest/quickstart.html
    * Make migrations for `core` app by running command `./manage.py makemigrations` from the project root
    * Apply all migrations by running command `./manage.py migrate` from the project root
@@ -38,4 +37,25 @@
      * Add filters for the following fields: `is_staff`, `is_active`, `is_superuser`
      * Hide `password` field
      * Make fields `last_login`, `date_joined` non-editable
-&nbsp;
+
+2.2 Deploy
+* Create a Git branch 'deploy' and switch to it using command `git switch -c deploy`
+* * Add `gunicorn` and `djangorestframework` package through Poetry
+* Create Dockerfile for Django api in the project root and make sure it can build.
+  * In `CMD` instruction use `gunicorn` instead of `runserver`.
+  * In `ENTRYPOINT` instruction include script that contains applying migrations logic
+* Create `docker-compose.yaml` file in the project root and fill it using the following instructions:
+  * 3 services should be created - `db` for Postgres, `api` for Django app, `frontend` for frontend server nginx
+  * An existing image for frontend `doom2/tick-tick-frontend` should be used
+  * Use volumes for postgres, api and nginx configuration file.
+  * A volume for static should be created as well to store Django static files
+  * Api container should depend on db container, while frontend container should depend on api
+* Execute command `docker-compose up -d` and make sure that all services are started correctly
+* Crete Cloud VPS if you don't have one
+* Create DNS name using Freenom service (https://www.freenom.com)
+* Delegate the domain to hosting
+* Setup your VPS:
+  * Install Docker & Compose services
+  * Create user `deploy` with admin privileges
+  * Allow SSH connection by login and password
+* Make CI/CD pipeline using GitHub Actions platform.
