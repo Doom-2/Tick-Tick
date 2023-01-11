@@ -11,7 +11,8 @@
 #### 2. Project Creation Steps
 2.1 Initial setup, DB connection, Django admin customization
    * Create Python Virtual Environment using Poetry
-   * Install `django`, `django-environ` and `psycopg2-binary` packages through Poetry
+   * Install `django`, `django-environ` and `psycopg2-binary` packages. \
+     Hereinafter use `Poetry` tool to install python dependencies.
    * Create Django project `todolist`
    * Create a Git repository `Tick-Tick` on GitHub
    * From here on, commit changes into Git as needed
@@ -40,7 +41,7 @@
 
 2.2 Deploy
 * Create a Git branch 'deploy' and switch to it using command `git switch -c deploy`
-* * Add `gunicorn` and `djangorestframework` package through Poetry
+* Add `gunicorn` and `djangorestframework` package
 * Create Dockerfile for Django api in the project root and make sure it can build.
   * In `CMD` instruction use `gunicorn` instead of `runserver`.
   * In `ENTRYPOINT` instruction include script that contains applying migrations logic
@@ -59,3 +60,29 @@
   * Create user `deploy` with admin privileges
   * Allow SSH connection by login and password
 * Make CI/CD pipeline using GitHub Actions platform.
+* Install the `pre-commit` package and use it for code inspection with popular hooks as \
+ `end-of-file-fixer`, `trailing-whitespace`, `double-quote-string-fixer`, `flake8`, etc.
+
+2.3 Auth
+* Add CRUD for User Model
+  * Create custom User Manager
+  * Use Django authentication system from `django.contrib.auth` standard library. \
+  Check `username/password` with `authenticate()` method and return a user instance if it is correct with `login()` method, which are presented in this lib.
+  * Add serializers and endpoints for Register, Login, UserProfile, ChangePassword.
+  * Tips:
+    * Inherit `LoginSerializer` from `Serializer` class instead of `ModelSerializer` class in order to prevent
+    an automatic attempt to create an object, even if it exists in the database.
+    * Inherit `UserProfile` endpoint from `RetrieveUpdateDestroyAPIView` and for logging user out redefine `delete()` method,
+    where call `logout()` method from `django.contrib.auth` library.
+* Set up user authentication via VK or any other social network using Python Social Auth mechanism for Django projects.
+  * Main configuration: https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
+  * Backend support for VK: https://python-social-auth.readthedocs.io/en/latest/backends/vk.html
+* Add URLs entries to `ursl.py` of `core` app as following rules:
+  * `core/signup` for register endpoint
+  * `core/login` for login endpoint
+  * `core/profile` for user profile endpoint
+  * `core/update_password` for password update endpoint
+* Add URLs entry `path('oauth/', include('social_django.urls', namespace='social'))` to `urls.py` of `todolist` app for social authentication.
+* Update frontend image to `doom2/tick-tick-frontend:v2.0` in `docker-compose.yaml` locally and remotely
+* Install `drf_yasg` package to generate Swagger/OpenAPI 2.0 specification from your Django Rest Framework API.
+* Test all endpoints via Postman API platform or Swagger tool.
