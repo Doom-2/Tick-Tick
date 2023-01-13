@@ -17,6 +17,15 @@ from core.serializers import (
     LoginSerializer,
     ChangePasswordSerializer
 )
+from django.views.generic.base import TemplateView
+
+
+class VkApiErrorPage(TemplateView):
+    template_name = 'vk_api_error.html'
+
+
+class VkLoginErrorPage(TemplateView):
+    template_name = 'vk_login_error.html'
 
 
 @api_view(['GET'])
