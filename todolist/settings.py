@@ -111,7 +111,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
     ],
 }
 
@@ -144,11 +143,13 @@ ACCOUNT_EMAIL_REQUIRED = False
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in'
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/auth'
+
+
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/categories'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/auth'
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',  # backend authorization via VK
