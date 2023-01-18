@@ -44,12 +44,13 @@ services:
       - backend_nw
       - frontend_nw
     volumes:
-      - ./todolist:/project/todolist
-      - ./core:/project/core
+#      - ./todolist:/project/todolist
+#      - ./core:/project/core
+#      - ./goals:/project/goals
       - ./static:/project/static
 
   frontend:
-    image: doom2/tick-tick-frontend:v2.0
+    image: doom2/tick-tick-frontend:v3.0
     restart: always
     ports:
       - "80:80"
