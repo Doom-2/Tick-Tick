@@ -68,11 +68,14 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
   * Install Docker & Compose services
   * Create user `deploy` with admin privileges
   * Allow SSH connection by login and password
-* Make CI/CD pipeline using GitHub Actions platform
+* Make CI/CD pipeline using GitHub Actions platform and `action.yaml` file
 * Install the `pre-commit` package and use it for code inspection with popular hooks as \
  `end-of-file-fixer`, `trailing-whitespace`, `double-quote-string-fixer`, `flake8`, etc.
+* Make Pull Request in feature `deploy`, discuss and check its functionality with Team Lead, \
+  then make the necessary changes and merge with the `master` branch
 
 2.3 Auth
+* Create a Git branch `auth` and switch to it
 * Add CRUD for User Model:
   * Create custom User Manager
   * Use Django authentication system from `django.contrib.auth` standard library. \
@@ -97,4 +100,18 @@ Tips:
 * Add URLs entry `path('oauth/', include('social_django.urls', namespace='social'))` to `urls.py` of `todolist` app for social authentication
 * Update frontend image to `doom2/tick-tick-frontend:v2.0` in `docker-compose.yaml` locally and remotely
 * Install `drf_yasg` package to generate Swagger/OpenAPI 2.0 specification from your Django Rest Framework API
-* Test all endpoints via Postman API platform or Swagger tool
+* Test all endpoints via Postman API platform or Swagger tool.
+* Make Pull Request in current feature `auth`, discuss and check its functionality with Team Lead, \
+  then make the necessary changes and merge with the `master` branch.
+* Apply changes on your remote server
+
+2.4 Goals app. The main interface.
+* Create a Git branch `goals` and switch to it
+* Create new app `goals` and register it in `settings.py`
+* Add the following models using ORM: `GoalCategory`, `Goal`, `GoalComment`. Get models specification from Swagger.
+* Implement CRUD for these models using DRF APIViews and Serializers
+* Add an existing models to Django admin site
+* Install `django-filter` package to filter down a queryset based on a model’s fields
+* Add `LimitOffsetPagination` to separate web content into discrete pages
+* Add, `OrderingFilter` and `SearchFilter` to realize the ordering and search functionality
+* Apply changes on your remote server
