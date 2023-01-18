@@ -35,13 +35,16 @@ services:
       timeout: 3s
       retries: 5
     volumes:
+#      - ./todolist:/project/todolist
+#      - ./core:/project/core
+#      - ./goals:/project/goals
       - ./static:/project/static
     networks:
       - backend_nw
       - frontend_nw
 
   frontend:
-    image: doom2/tick-tick-frontend
+    image: doom2/tick-tick-frontend:v3.0
     restart: always
     ports:
       - "81:80"

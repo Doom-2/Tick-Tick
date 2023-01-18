@@ -10,6 +10,6 @@ class MySocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
             msg = str(exception)
             messages.add_message(request, messages.ERROR, msg)
             return HttpResponseRedirect(redirect_to='/core/vk_api_error/')
-        else:
-            # return super(MySocialAuthExceptionMiddleware, self).process_exception(request, exception)
-            return HttpResponseRedirect(redirect_to='/core/vk_login_error/')
+        # else:
+            return super(MySocialAuthExceptionMiddleware, self).process_exception(request, exception)
+            # return HttpResponseRedirect(redirect_to='/core/vk_login_error/')

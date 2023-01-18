@@ -4,6 +4,7 @@
 # except
 !todolist/**
 !core/**
+!goals/**
 !entrypoint.sh
 !manage.py
 !poetry.lock
