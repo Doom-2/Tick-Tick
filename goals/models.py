@@ -14,6 +14,9 @@ class GoalCategory(models.Model):
     created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='updated at', auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Status(models.IntegerChoices):
     to_do = 1, 'To Do'
@@ -45,6 +48,9 @@ class Goal(models.Model):
     due_date = models.DateField(verbose_name='deadline', default=date.today, null=True)
     created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='updated at', auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 
 class GoalComment(models.Model):
