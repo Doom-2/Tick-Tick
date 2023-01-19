@@ -36,6 +36,7 @@ class GoalCategoryListView(ListAPIView):
     ]
     ordering_fields = ['title', 'created']
     ordering = ['-created']
+    search_fields = ['title']
 
     def get_queryset(self):
         return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
