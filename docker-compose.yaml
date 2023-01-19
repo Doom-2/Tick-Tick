@@ -50,7 +50,7 @@ services:
       - ./static:/project/static
 
   frontend:
-    image: doom2/tick-tick-frontend:v3.0
+    image: doom2/tick-tick-frontend:v3.1
     restart: always
     ports:
       - "80:80"
