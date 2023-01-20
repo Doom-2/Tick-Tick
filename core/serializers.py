@@ -11,8 +11,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
 
-    password = serializers.CharField(required=True)
-    password_repeat = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(required=True, style={'input_type': 'password'},)
+    password_repeat = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'},)
 
     class Meta:
         model = User
