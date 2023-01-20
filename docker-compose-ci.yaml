@@ -44,7 +44,7 @@ services:
       - frontend_nw
 
   frontend:
-    image: doom2/tick-tick-frontend:v3.1
+    image: doom2/tick-tick-frontend:v3.2
     restart: always
     ports:
       - "81:80"
