@@ -35,9 +35,6 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-#      - ./todolist:/project/todolist
-#      - ./core:/project/core
-#      - ./goals:/project/goals
       - ./static:/project/static
     networks:
       - backend_nw
@@ -56,7 +53,6 @@ services:
 
 volumes:
   pg_data:
-  static:
 
 networks:
   backend_nw:
