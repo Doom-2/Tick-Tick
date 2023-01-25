@@ -19,6 +19,9 @@ class Board(DatesModelMixin):
     title = models.CharField(verbose_name='title', max_length=255)
     is_deleted = models.BooleanField(verbose_name='is_deleted', default=False)
 
+    def __str__(self):
+        return self.title
+
 
 class BoardParticipant(DatesModelMixin):
     class Meta:
@@ -34,6 +37,9 @@ class BoardParticipant(DatesModelMixin):
     board = models.ForeignKey(Board, verbose_name='board', on_delete=models.PROTECT, related_name='participants')
     user = models.ForeignKey(User, verbose_name='user', on_delete=models.PROTECT, related_name='participants')
     role = models.PositiveSmallIntegerField(verbose_name='role', choices=Role.choices, default=Role.owner)
+
+    def __str__(self):
+        return self.user.username
 
 
 class GoalCategory(DatesModelMixin):
