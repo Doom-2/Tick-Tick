@@ -2,11 +2,8 @@ from rest_framework import permissions
 from .models import BoardParticipant, GoalCategory, Goal, Board, GoalComment
 
 
-class BoardPermissions(permissions.BasePermission):
+class BoardPermissions(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj: Board):
-
-        if not request.user.is_authenticated:
-            return False
 
         #  if safe method (e.g. 'GET') check whether the current board has participant
         if request.method in permissions.SAFE_METHODS:
@@ -18,19 +15,8 @@ class BoardPermissions(permissions.BasePermission):
         ).exists()
 
 
-class CategoryPermissions(permissions.BasePermission):
+class CategoryPermissions(permissions.IsAuthenticated):
 
-    # not used
-    # def has_permission(self, request, view):
-    #
-    #     if not request.user.is_authenticated:
-    #         return False
-    #
-    #     if request.method not in permissions.SAFE_METHODS:
-    #         return BoardParticipant.objects.filter(user=request.user, role__in=[1, 2], board=5).exists()
-    #     return True
-
-    # used
     def has_object_permission(self, request, view, obj: GoalCategory):
 
         if not request.user.is_authenticated:
