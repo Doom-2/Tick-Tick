@@ -3,7 +3,40 @@ from django.db import models
 from core.models import User
 
 
-class GoalCategory(models.Model):
+class DatesModelMixin(models.Model):
+    class Meta:
+        abstract = True  # for preventing table creation for this model
+
+    created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
+    updated = models.DateTimeField(verbose_name='updated at', auto_now=True)
+
+
+class Board(DatesModelMixin):
+    class Meta:
+        verbose_name = 'Board'
+        verbose_name_plural = 'Boards'
+
+    title = models.CharField(verbose_name='title', max_length=255)
+    is_deleted = models.BooleanField(verbose_name='is_deleted', default=False)
+
+
+class BoardParticipant(DatesModelMixin):
+    class Meta:
+        unique_together = ('board', 'user')
+        verbose_name = 'Participant'
+        verbose_name_plural = 'Participants'
+
+    class Role(models.IntegerChoices):
+        owner = 1, 'Owner'
+        writer = 2, 'Writer'
+        reader = 3, 'Reader'
+
+    board = models.ForeignKey(Board, verbose_name='board', on_delete=models.PROTECT, related_name='participants')
+    user = models.ForeignKey(User, verbose_name='user', on_delete=models.PROTECT, related_name='participants')
+    role = models.PositiveSmallIntegerField(verbose_name='role', choices=Role.choices, default=Role.owner)
+
+
+class GoalCategory(DatesModelMixin):
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
@@ -11,8 +44,7 @@ class GoalCategory(models.Model):
     title = models.CharField(verbose_name='title', max_length=255)
     user = models.ForeignKey(User, verbose_name='Author', on_delete=models.PROTECT)
     is_deleted = models.BooleanField(verbose_name='is_deleted', default=False)
-    created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
-    updated = models.DateTimeField(verbose_name='updated at', auto_now=True)
+    board = models.ForeignKey(Board, verbose_name='board', on_delete=models.PROTECT, related_name='categories')
 
     def __str__(self):
         return self.title
