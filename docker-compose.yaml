@@ -49,7 +49,10 @@ services:
       - ./goals:/project/goals
 
   frontend:
-    image: doom2/tick-tick-frontend:v3.2
+#    build:
+#      context: frontend/Version_2/.
+#      dockerfile: Dockerfile
+    image: doom2/tick-tick-frontend:v4.1
     restart: always
     ports:
       - "80:80"
