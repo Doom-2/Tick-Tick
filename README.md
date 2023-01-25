@@ -1,6 +1,7 @@
 # Tick-Tick
 ### ToDo List style app
 ### Tech stack - Python 3.10, Django 4.1.4, Postgres 15.0-alpine, Docker Compose
+#### [tick-tick.ml](http://tick-tick.ml)
 
 #### 1. Project start:
    * Make sure Docker Compose is installed on your local machine
@@ -18,7 +19,7 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
 ---
 &nbsp;
 #### 2. Project Creation Steps
-2.1 Initial setup, DB connection, Django admin customization
+###### 2.1 Initial setup, DB connection, Django admin customization
 * Create Python Virtual Environment using Poetry
 * Install `django`, `django-environ` and `psycopg2-binary` packages. \
   Hereinafter use `Poetry` tool to install python dependencies.
@@ -48,7 +49,7 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
   * Hide `password` field
   * Make fields `last_login`, `date_joined` non-editable
 
-2.2 Deploy
+###### 2.2 Deploy
 * Create a Git branch 'deploy' and switch to it using command `git switch -c deploy`
 * Add `gunicorn` and `djangorestframework` package
 * Create Dockerfile for Django api in the project root and make sure it can build:
@@ -74,7 +75,7 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
 * Make Pull Request in feature `deploy`, discuss and check its functionality with Team Lead, \
   then make the necessary changes and merge with the `master` branch
 
-2.3 Auth
+###### 2.3 Auth
 * Create a Git branch `auth` and switch to it
 * Add CRUD for User Model:
   * Create custom User Manager
@@ -105,7 +106,7 @@ Tips:
   then make the necessary changes and merge with the `master` branch.
 * Apply changes on your remote server
 
-2.4 Goals app. The main interface.
+###### 2.4 Goals app. The main interface.
 * Create a Git branch `goals` and switch to it
 * Create new app `goals` and register it in `settings.py`
 * Add the following models using ORM: `GoalCategory`, `Goal`, `GoalComment`. Get models specification from Swagger.
@@ -114,4 +115,25 @@ Tips:
 * Install `django-filter` package to filter down a queryset based on a model’s fields
 * Add `LimitOffsetPagination` to separate web content into discrete pages
 * Add, `OrderingFilter` and `SearchFilter` to realize the ordering and search functionality
+* Apply changes on your remote server
+
+###### 2.5 Goals sharing.
+* Create new models `Board` and `BoardParticipant` to `goals` app. Get models specification from Swagger
+* Add `board` field to `GoalCategory` model as ForeignKey
+* If you already have entries in DB take into account `board` field cannot be null, \
+  because each category must refer to the board, so do the following trick:
+  * temporary mark this field as nullable
+  * make migrations
+  * create an empty migration `python manage.py makemigrations goals —empty -n create_new_objects` \
+    and write code in it as shown in `/goals/mogrations/0003_create_new_objects.py`
+  * delete `null=True` option of the field `board`
+  * make migrations again, on warning choose option 2 (Ignore for now)
+  * apply migrations
+* Implement CRUD for these models using DRF APIViews and Serializers
+* Append an existing models to Django admin site
+* Supplement new entity with pagination and ordering functionality
+* Redefine QuerySets for existing views `GoalCategory`, `Goal`, `GoalComment`
+  considering functionality of the `Board` model
+* Add category filtering by board
+* Use new version of frontend from here `doom2/tick-tick-frontend:v4.1`
 * Apply changes on your remote server
