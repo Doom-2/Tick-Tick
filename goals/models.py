@@ -50,24 +50,22 @@ class GoalCategory(DatesModelMixin):
         return self.title
 
 
-class Status(models.IntegerChoices):
-    to_do = 1, 'To Do'
-    in_progress = 2, 'In progress'
-    done = 3, 'Done'
-    archived = 4, 'Archived'
-
-
-class Priority(models.IntegerChoices):
-    low = 1, 'Low'
-    medium = 2, 'Medium'
-    high = 3, 'High'
-    critical = 4, 'Critical'
-
-
-class Goal(models.Model):
+class Goal(DatesModelMixin):
     class Meta:
         verbose_name = 'Goal'
         verbose_name_plural = 'Goals'
+
+    class Status(models.IntegerChoices):
+        to_do = 1, 'To Do'
+        in_progress = 2, 'In progress'
+        done = 3, 'Done'
+        archived = 4, 'Archived'
+
+    class Priority(models.IntegerChoices):
+        low = 1, 'Low'
+        medium = 2, 'Medium'
+        high = 3, 'High'
+        critical = 4, 'Critical'
 
     title = models.CharField(verbose_name='title', max_length=255)
     description = models.CharField(verbose_name='description', max_length=255)
@@ -78,14 +76,12 @@ class Goal(models.Model):
     user = models.ForeignKey(User, verbose_name='author', on_delete=models.PROTECT)
     category = models.ForeignKey(GoalCategory, verbose_name='category', on_delete=models.PROTECT, related_name='goals')
     due_date = models.DateField(verbose_name='deadline', default=date.today, null=True)
-    created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
-    updated = models.DateTimeField(verbose_name='updated at', auto_now=True)
 
     def __str__(self):
         return self.title
 
 
-class GoalComment(models.Model):
+class GoalComment(DatesModelMixin):
     class Meta:
         verbose_name = 'GoalComment'
         verbose_name_plural = 'GoalComments'
@@ -93,5 +89,3 @@ class GoalComment(models.Model):
     goal = models.ForeignKey(Goal, verbose_name='goal', on_delete=models.CASCADE)
     user = models.ForeignKey(User, verbose_name='author', on_delete=models.CASCADE)
     text = models.CharField(verbose_name='text', max_length=255)
-    created = models.DateTimeField(verbose_name='created at', auto_now_add=True)
-    updated = models.DateTimeField(verbose_name='updated at', auto_now=True)

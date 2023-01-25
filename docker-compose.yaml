@@ -44,10 +44,9 @@ services:
       - backend_nw
       - frontend_nw
     volumes:
-#      - ./todolist:/project/todolist
-#      - ./core:/project/core
-#      - ./goals:/project/goals
       - ./static:/project/static
+      - ./core:/project/core
+      - ./goals:/project/goals
 
   frontend:
     image: doom2/tick-tick-frontend:v3.2
@@ -60,12 +59,12 @@ services:
     networks:
       - frontend_nw
     volumes:
+#      - ./frontend/Version_2:/code/build/
       - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./static:/usr/share/nginx/html/static/
 
 volumes:
   pg_data:
-  static:
 
 networks:
   backend_nw:
