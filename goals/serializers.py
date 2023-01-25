@@ -15,13 +15,6 @@ class GoalCategoryCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'user', 'board')
         fields = '__all__'
 
-    # def validate_board(self, value: Board):
-    #     if value.is_deleted:
-    #         raise serializers.ValidationError('not allowed in deleted board')
-    #
-    #     if not value.participants.filter(role__in=[1, 2], user=self.context['request'].user):
-    #         raise PermissionDenied({"non_field_errors": ["You don't have write permission"]})
-
     def create(self, validated_data):
         board_id = self.initial_data.pop('board', None)
         board = get_object_or_404(Board, pk=board_id)
@@ -44,6 +37,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 
 class GoalCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    description = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
     class Meta:
         model = Goal
@@ -125,41 +119,44 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
 
 
 class BoardSerializer(serializers.ModelSerializer):
-    participants = BoardParticipantSerializer(many=True)
+    participants = BoardParticipantSerializer(many=True, required=False)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    title = serializers.CharField(max_length=255, required=False)
 
     class Meta:
         model = Board
         fields = '__all__'
         read_only_fields = ('id', 'created', 'updated')
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data: dict):
         owner = validated_data.pop('user')
-        new_participants = validated_data.pop('participants')
-        new_by_id = {part['user'].id: part for part in new_participants}
-
-        old_participants = instance.participants.exclude(user=owner)
-        with transaction.atomic():
-            for old_participant in old_participants:
-                if old_participant.user_id not in new_by_id:
-                    old_participant.delete()
-                else:
-                    if (
-                            old_participant.role
-                            != new_by_id[old_participant.user_id]['role']
-                    ):
-                        old_participant.role = new_by_id[old_participant.user_id][
-                            'role'
-                        ]
-                        old_participant.save()
-                    new_by_id.pop(old_participant.user_id)
-            for new_part in new_by_id.values():
-                BoardParticipant.objects.create(
-                    board=instance, user=new_part['user'], role=new_part['role']
-                )
-
+        if 'title' in validated_data:
             instance.title = validated_data['title']
-            instance.save()
+        if 'participants' in validated_data:
+            new_participants = validated_data.pop('participants')
+            new_by_id = {part['user'].id: part for part in new_participants}
+
+            old_participants = instance.participants.exclude(user=owner)
+            with transaction.atomic():
+                for old_participant in old_participants:
+                    if old_participant.user_id not in new_by_id:
+                        old_participant.delete()
+                    else:
+                        if (
+                                old_participant.role
+                                != new_by_id[old_participant.user_id]['role']
+                        ):
+                            old_participant.role = new_by_id[old_participant.user_id][
+                                'role'
+                            ]
+                            old_participant.save()
+                        new_by_id.pop(old_participant.user_id)
+                for new_part in new_by_id.values():
+                    BoardParticipant.objects.create(
+                        board=instance, user=new_part['user'], role=new_part['role']
+                    )
+
+        instance.save()
 
         return instance
 

@@ -12,18 +12,19 @@ def create_objects(apps: Apps, schema_editor):
     GoalCategory: Model = apps.get_model('goals', 'GoalCategory')
 
     with transaction.atomic():  # apply all changes with one transaction
+        now = timezone.now()
         for user in User.objects.all():
             new_board = Board.objects.create(
                 title='My goals',
-                created=timezone.now(),
-                updated=timezone.now()
+                created=now,
+                updated=now
             )
             BoardParticipant.objects.create(
                 user=user,
                 board=new_board,
                 role=1,
-                created=timezone.now(),
-                updated=timezone.now()
+                created=now,
+                updated=now
             )
 
             # apply to all user categories his board
