@@ -62,12 +62,13 @@ services:
     networks:
       - frontend_nw
     volumes:
-#      - ./frontend/Version_2:/code/build/
+#      - frontend:/code/build/
       - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./static:/usr/share/nginx/html/static/
 
 volumes:
   pg_data:
+#  frontend:
 
 networks:
   backend_nw:

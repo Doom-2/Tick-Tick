@@ -30,7 +30,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: python3 -c 'import http.client;http.client.HTTPConnection("158.160.37.55", timeout=1).request("GET", "api/ping/")'
+      test: python3 -c 'import http.client;http.client.HTTPConnection("api:9000", timeout=1).request("GET", "/ping/")'  || exit 1
       interval: 3s
       timeout: 3s
       retries: 5
