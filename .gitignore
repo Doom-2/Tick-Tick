@@ -1,3 +1,5 @@
 .idea/
 .env
 static/
+/frontend/
+/bot/tg/test_bot.py
