@@ -10,14 +10,15 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     restart: always
-
     healthcheck:
       test: pg_isready -U ${DB_USER} -d ${DB_NAME}
       interval: 5s
       timeout: 5s
       retries: 5
+
     networks:
       - backend_nw
+      - bot_nw
 
   api:
     image: doom2/tick-tick:$GITHUB_REF_NAME-$GITHUB_RUN_ID
@@ -34,6 +35,8 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
+    command: python manage.py runserver 0.0.0.0:9000
+
     volumes:
       - ./static:/project/static
     networks:
@@ -41,15 +44,30 @@ services:
       - frontend_nw
 
   frontend:
-    image: doom2/tick-tick-frontend:v4.1
+    image: sermalenk/skypro-front:lesson-38
     restart: always
     ports:
       - "81:80"
-    networks:
-      - frontend_nw
+
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./static:/usr/share/nginx/html/static/
+    networks:
+      - frontend_nw
+
+  bot:
+    image: doom2/tick-tick-tg-bot:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: python manage.py runbot
+
+    volumes:
+      - ./bot:/project/bot
+    networks:
+      - bot_nw
 
 volumes:
   pg_data:
@@ -58,4 +76,6 @@ networks:
   backend_nw:
     driver: bridge
   frontend_nw:
+    driver: bridge
+  bot_nw:
     driver: bridge
