@@ -81,7 +81,8 @@ class Command(BaseCommand):
                         elif not created and tg_user.user_id and item.message.text == '/goals':
                             category_set = GoalCategory.objects.all().filter(
                                 board__participants__user_id=tg_user.user_id,
-                                is_deleted=False
+                                is_deleted=False,
+                                board__participants__role__in=[1, 2]
                             )
                             goals_set = list(Goal.objects.filter(
                                 status__in=[1, 2, 3],
@@ -94,8 +95,9 @@ class Command(BaseCommand):
                                 and not self.category_selection_state and not self.goal_title_state:
                             self.category_set = list(
                                 GoalCategory.objects.filter(board__participants__user_id=tg_user.user_id,
-                                                            is_deleted=False).values_list('title',
-                                                                                          flat=True))
+                                                            is_deleted=False,
+                                                            board__participants__role__in=[1, 2]
+                                                            ).values_list('title', flat=True))
                             self.tg_client.send_message(item.message.chat.id,
                                                         '\n'.join(self.category_set))
                             self.logger.info('\n'.join(self.category_set))
@@ -116,7 +118,8 @@ class Command(BaseCommand):
                                                            category=self.selected_category)
                             category_set = GoalCategory.objects.filter(
                                 board__participants__user_id=tg_user.user_id,
-                                is_deleted=False
+                                is_deleted=False,
+                                board__participants__role__in=[1, 2]
                             )
                             goals_set = list(Goal.objects.filter(
                                 status__in=[1, 2, 3],

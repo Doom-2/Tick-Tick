@@ -3,8 +3,6 @@ version: '3.8'
 services:
   db:
     image: postgres:15.0-alpine
-    volumes:
-      - pg_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -16,6 +14,8 @@ services:
       timeout: 5s
       retries: 5
 
+    volumes:
+      - pg_data:/var/lib/postgresql/data
     networks:
       - backend_nw
       - bot_nw
@@ -64,8 +64,6 @@ services:
         condition: service_healthy
     command: python manage.py runbot
 
-    volumes:
-      - ./bot:/project/bot
     networks:
       - bot_nw
 
