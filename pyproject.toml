@@ -16,6 +16,8 @@ djangorestframework = "^3.14.0"
 social-auth-app-django = "^5.0.0"
 drf-yasg = "^1.21.4"
 django-filter = "^22.1"
+marshmallow = "^3.19.0"
+marshmallow-dataclass = "^8.5.11"
 
 [tool.poetry.dev-dependencies]
 
