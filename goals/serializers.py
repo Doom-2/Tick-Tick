@@ -56,6 +56,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 
 class GoalSerializer(serializers.ModelSerializer):
     user = UserDetailsSerializer(read_only=True)
+    description = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
     class Meta:
         model = Goal
