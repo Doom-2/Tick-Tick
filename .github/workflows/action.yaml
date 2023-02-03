@@ -9,14 +9,18 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
-      - name: docker build
+      - name: docker build api
         env:
           HOME: /Tick-tick
         run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+      - name: docker build tg bot
+        run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.TG_BOT_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker login
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
-      - name: docker push
+      - name: docker push api
         run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+      - name: docker push tg bot
+        run: docker push ${{ secrets.DOCKER_USER }}/${{ secrets.TG_BOT_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
   deploy:
     runs-on: ubuntu-latest
