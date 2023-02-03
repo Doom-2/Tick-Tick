@@ -161,7 +161,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',  # default backend authorization via login & password
 )
 
-CSRF_TRUSTED_ORIGINS = ['https://tick-tick.ml',]
+CSRF_TRUSTED_ORIGINS = ['https://tick-tick.ml', 'http://tick-tick.ml']
 CSRF_COOKIE_SECURE = True
 
 LOGGING = {
