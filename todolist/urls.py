@@ -66,6 +66,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('goals/', include('goals.urls')),
+    path('bot/', include('bot.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
