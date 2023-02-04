@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 def numerate_cats_tuple(cat_set: List[Tuple]) -> str:
     """
-    Convers list of tuple to string with line- by-line output
+    Converts list of tuple to string with line-by-line output
     [('1', 'var1'), ('23', 'var2'), ('34', 'var3')]
     ________
     1  var1
