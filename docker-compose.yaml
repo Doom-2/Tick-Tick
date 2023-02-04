@@ -25,6 +25,8 @@ services:
   api:
     build:
       context: .
+      target: api-image
+
     restart: always
     env_file:
       - ./.env
@@ -38,7 +40,6 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
-    command: python manage.py runserver 0.0.0.0:9000
 
     ports:
       - "9000:9000"
@@ -70,12 +71,13 @@ services:
   bot:
     build:
       context: .
+      target: bot-image
+    restart: on-failure
     env_file:
       - ./.env
     depends_on:
       db:
         condition: service_healthy
-    command: python manage.py runbot
 
     volumes:
       - ./bot:/project/bot

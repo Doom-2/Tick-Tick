@@ -12,9 +12,9 @@ jobs:
       - name: docker build api
         env:
           HOME: /Tick-tick
-        run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+        run: docker build --target api-image -t ${{ secrets.DOCKER_USER }}/${{ secrets.REPO_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker build tg bot
-        run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.TG_BOT_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+        run: docker build --target bot-image -t ${{ secrets.DOCKER_USER }}/${{ secrets.TG_BOT_NAME }}:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
       - name: docker login
         run: echo ${{ secrets.DOCKER_TOKEN }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
       - name: docker push api
