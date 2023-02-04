@@ -12,10 +12,10 @@ class TgClient:
         return f'https://api.telegram.org/bot{self.token}/{method}'
 
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
-        req = self.get_url('getUpdates') + f'?offset={offset}&timeout={timeout}'
-        resp = requests.get(req).json()
+        url = self.get_url('getUpdates')
+        response = requests.get(url, params={'offset': offset, 'timeout': timeout}).json()
         GetUpdatesResponseSchema = marshmallow_dataclass.class_schema(GetUpdatesResponse)
-        obj = GetUpdatesResponseSchema().load(resp)
+        obj = GetUpdatesResponseSchema().load(response)
         return obj
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:

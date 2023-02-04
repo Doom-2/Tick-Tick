@@ -8,7 +8,7 @@ class MessageFrom:
     id: int
     is_bot: bool
     first_name: str
-    username: str
+    username: Optional[str]
 
     class Meta:
         unknown = EXCLUDE
@@ -18,8 +18,8 @@ class MessageFrom:
 class Chat:
     id: int
     first_name: str
-    username: str
     type: str
+    username: Optional[str]
 
     class Meta:
         unknown = EXCLUDE
