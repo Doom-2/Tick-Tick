@@ -28,14 +28,22 @@ from .permissions import (
     CommentPermissions
 )
 
+''' #################### Category #################### '''
+
 
 class GoalCategoryCreateView(CreateAPIView):
+    """
+    API endpoint that allows goal category to be created.
+    """
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
 
 
 class GoalCategoryListView(ListAPIView):
+    """
+    Endpoint that allows goal category list to be created.
+    """
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCategorySerializer
@@ -56,15 +64,26 @@ class GoalCategoryListView(ListAPIView):
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
+    """
+    Endpoint that allows single goal category to be retrieved, updated or deleted.
+    """
     model = GoalCategory
     serializer_class = GoalCategorySerializer
     permission_classes = [CategoryPermissions]
 
     def get_queryset(self):
+        """
+        Filters categories by their boards where current user is participant.
+        :return: <QuerySet>
+        """
         return GoalCategory.objects.filter(board__participants__user=self.request.user,
                                            is_deleted=False)
 
     def perform_destroy(self, instance: GoalCategory):
+        """
+        Does not delete a category from database, but marks it as is_deleted
+        as well as changes all its goals statuses to 'archived'.
+        """
         instance.is_deleted = True
         goals = instance.goals.all()
         for goal in goals:
@@ -74,13 +93,22 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         return instance
 
 
+''' #################### Goal #################### '''
+
+
 class GoalCreateView(CreateAPIView):
+    """
+    API endpoint that allows goal to be created.
+    """
     model = Goal
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCreateSerializer
 
 
 class GoalListView(ListAPIView):
+    """
+    Endpoint that allows goal list to be viewed.
+    """
     model = Goal
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalSerializer
@@ -110,6 +138,9 @@ class GoalListView(ListAPIView):
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
+    """
+    Endpoint that allows single goal to be retrieved, updated or deleted.
+    """
     model = Goal
     serializer_class = GoalSerializer
     permission_classes = [GoalPermissions]
@@ -122,18 +153,30 @@ class GoalView(RetrieveUpdateDestroyAPIView):
                                    category__in=category_set)
 
     def perform_destroy(self, instance: Goal):
-        instance.status = 4
+        """
+        Does not delete an instance from database, but changes its status to 'archived'.
+        """
+        instance.status = Goal.Status.archived
         instance.save()
         return instance
 
 
+''' #################### Comment #################### '''
+
+
 class GoalCommentCreateView(CreateAPIView):
+    """
+    API endpoint that allows goal comment to be created.
+    """
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommentCreateSerializer
 
 
 class GoalCommentListView(ListAPIView):
+    """
+    Endpoint that allows goal comment list to be viewed.
+    """
     model = GoalComment
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CommentSerializer
@@ -153,6 +196,9 @@ class GoalCommentListView(ListAPIView):
 
 
 class GoalCommentView(RetrieveUpdateDestroyAPIView):
+    """
+    Endpoint that allows single comment to be retrieved, updated or deleted.
+    """
     model = GoalComment
     serializer_class = CommentSerializer
     permission_classes = [CommentPermissions]
@@ -163,7 +209,13 @@ class GoalCommentView(RetrieveUpdateDestroyAPIView):
         return GoalComment.objects.filter(goal__category__in=category_set)
 
 
+''' #################### Board #################### '''
+
+
 class BoardCreateView(CreateAPIView):
+    """
+    API endpoint that allows board to be created.
+    """
     model = Board
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = BoardCreateSerializer
@@ -188,6 +240,9 @@ class BoardListView(ListAPIView):
 
 
 class BoardView(RetrieveUpdateDestroyAPIView):
+    """
+    Endpoint that allows single board to be retrieved, updated or deleted.
+    """
     model = Board
     permission_classes = [BoardPermissions]
     serializer_class = BoardSerializer
