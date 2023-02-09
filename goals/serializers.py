@@ -91,19 +91,7 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created', 'updated', 'user', 'goal')
 
 
-class BoardCreateSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = Board
-        fields = '__all__'
-        read_only_fields = ('id', 'created', 'updated')
-
-    def create(self, validated_data: dict):
-        user = validated_data.pop('user')
-        board = Board.objects.create(**validated_data)
-        BoardParticipant.objects.create(user=user, board=board, role=BoardParticipant.Role.owner)
-        return board
+''' #################### Board Participant #################### '''
 
 
 class BoardParticipantSerializer(serializers.ModelSerializer):
@@ -117,6 +105,24 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
         model = BoardParticipant
         fields = '__all__'
         read_only_fields = ('id', 'created', 'updated', 'board')
+
+
+''' #################### Board #################### '''
+
+
+class BoardCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Board
+        fields = '__all__'
+        read_only_fields = ('id', 'created', 'updated')
+
+    def create(self, validated_data: dict):
+        user = validated_data.pop('user')
+        board = Board.objects.create(**validated_data)
+        BoardParticipant.objects.create(user=user, board=board, role=BoardParticipant.Role.owner)
+        return board
 
 
 class BoardSerializer(serializers.ModelSerializer):
