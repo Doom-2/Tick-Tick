@@ -21,6 +21,10 @@ class BotUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance: TgUser, validated_data: dict) -> TgUser:
+        """
+        Gets validated data and writes user fk field with 'id' value of current authenticated user.
+        Creates instance of TgClient and send message to newly linked user in Telegram.
+        """
 
         instance.user_id = self.context['request'].user.id
         instance.save(update_fields=('user_id',))

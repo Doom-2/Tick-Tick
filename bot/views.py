@@ -5,11 +5,18 @@ from .serializers import BotUpdateSerializer
 
 
 class BotUpdateView(UpdateAPIView):
+    """
+    Handles PATCH to /bot/verify.
+    """
     queryset = TgUser.objects.all()
     serializer_class = BotUpdateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
+        """
+        Gets data from request and passes it to serializer for validation after that update user fk field.
+        :return: updated TGUser object where 'user' field is filled with 'id' value of current authenticated user.
+        """
         queryset = self.filter_queryset(self.get_queryset())
         data = self.request.data
         serializer = self.serializer_class(data=data)
