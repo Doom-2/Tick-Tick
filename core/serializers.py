@@ -1,5 +1,5 @@
 from django.contrib.auth.password_validation import validate_password
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from todolist import settings
@@ -11,25 +11,25 @@ class RegisterSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
 
-    password = serializers.CharField(required=True, style={'input_type': 'password'},)
-    password_repeat = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'},)
+    password = serializers.CharField(required=True, style={'input_type': 'password'}, )
+    password_repeat = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'}, )
 
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password', 'password_repeat',)
 
-    def validate_password(self, password):
+    def validate_password(self, password: str) -> str:
         validate_password(password=password, user=User)
         return password
 
-    def validate(self, data: dict):
+    def validate(self, data: dict) -> dict:
         if data['password'] != data['password_repeat']:
             raise serializers.ValidationError(
                 "The two password fields didn't match.")
         data.pop('password_repeat')
         return data
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> User:
         user = User.objects.create(**validated_data)
         user.set_password(user.password)
         user.save()
@@ -52,13 +52,14 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-    def validate(self, data):
+    def validate(self, data: str) -> User:
+
         user = authenticate(**data)
         if user:
             if user.is_active:
                 return user
-            raise AuthenticationFailed('Account is not activated')
-        raise serializers.ValidationError('Invalid credentials.')
+            raise ValidationError('Account is not activated')
+        raise AuthenticationFailed('Invalid credentials.')
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -70,6 +71,6 @@ class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
-    def validate_new_password(self, password):
+    def validate_new_password(self, password: str) -> str:
         validate_password(password=password, user=User)
         return password

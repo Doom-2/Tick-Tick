@@ -20,7 +20,7 @@ class BotUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Verification code is incorrect')
         return value
 
-    def update(self, instance: TgUser, validated_data):
+    def update(self, instance: TgUser, validated_data: dict) -> TgUser:
 
         instance.user_id = self.context['request'].user.id
         instance.save(update_fields=('verification_code',))
