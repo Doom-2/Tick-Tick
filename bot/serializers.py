@@ -23,7 +23,7 @@ class BotUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance: TgUser, validated_data: dict) -> TgUser:
 
         instance.user_id = self.context['request'].user.id
-        instance.save(update_fields=('verification_code',))
+        instance.save(update_fields=('user_id',))
         cl = TgClient(token)
         cl.send_message(instance.tg_chat_id, f'{instance.user.username.title()}, '
                                              f'you have successfully authorized via Telegram! 🙏\n'

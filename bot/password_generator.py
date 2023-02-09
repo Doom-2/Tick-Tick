@@ -8,7 +8,6 @@ def pwd_generator(length: int = 19) -> str:
     lower: str = string.ascii_lowercase
     upper: str = string.ascii_uppercase
     num: str = string.digits
-    # symbols = string.punctuation
 
     # combine the data
     all_: str = lower + upper + num

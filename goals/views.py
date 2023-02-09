@@ -68,7 +68,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         instance.is_deleted = True
         goals = instance.goals.all()
         for goal in goals:
-            goal.status = 4
+            goal.status = Goal.Status.archived
             goal.save()
         instance.save()
         return instance
@@ -97,8 +97,8 @@ class GoalListView(ListAPIView):
 
     def get_queryset(self):
         """
-        1. Filter categories by their boards where current user is participant
-        2. Return goals which are not archived and belong to filtered categories
+        1. Filters categories by their boards where current user is participant.
+        2. Returns goals which are not archived and belong to filtered categories.
         :return: <QuerySet>
         """
 
@@ -169,6 +169,24 @@ class BoardCreateView(CreateAPIView):
     serializer_class = BoardCreateSerializer
 
 
+class BoardListView(ListAPIView):
+    """
+    Endpoint that allows board list to be viewed.
+    """
+    model = Board
+    permission_classes = [permissions.IsAuthenticated, BoardPermissions]
+    serializer_class = BoardListSerializer
+    pagination_class = LimitOffsetPagination
+    filter_backends = [
+        OrderingFilter,
+    ]
+    ordering = ['-title']
+
+    def get_queryset(self):
+        return Board.objects.filter(participants__user=self.request.user,
+                                    is_deleted=False)
+
+
 class BoardView(RetrieveUpdateDestroyAPIView):
     model = Board
     permission_classes = [BoardPermissions]
@@ -186,18 +204,3 @@ class BoardView(RetrieveUpdateDestroyAPIView):
             Goal.objects.filter(category__board=instance).update(status=Goal.Status.archived)
 
         return instance
-
-
-class BoardListView(ListAPIView):
-    model = Board
-    permission_classes = [permissions.IsAuthenticated, BoardPermissions]
-    serializer_class = BoardListSerializer
-    pagination_class = LimitOffsetPagination
-    filter_backends = [
-        OrderingFilter,
-    ]
-    ordering = ['-title']
-
-    def get_queryset(self):
-        return Board.objects.filter(participants__user=self.request.user,
-                                    is_deleted=False)
