@@ -6,16 +6,15 @@
 #### 1. Project start:
    * Make sure Docker Compose is installed on your local machine
    * Clone repo with `git clone https://github.com/Doom-2/Tick-Tick.git`
-   * Rename `.env.example` to `.env` and edit it with your own values. See footnote for more <sup>*</sup>
+   * Rename `.env.example` to `.env` and edit it with your own values
    * Run the following command from the project root `docker compose up --build -d` to run this app
    * Client side (frontend) will be available on `http://localhost`, server side (backend) on `http://localhost:9000`
 
 ---
-<sup>*</sup>
 To set up user authentication via OAuth 2.0 and API VK make the following steps:
 1. Create VK app on https://dev.vk.com with `Website` as platform, `http://127.0.0.1` as Website address, `127.0.0.1` as Base domain.
-2. Set the value of `SOCIAL_AUTH_VK_OAUTH2_KEY` to the value of `App ID` \
-and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings tab of your VK app.
+2. Set the value of `SOCIAL_AUTH_VK_OAUTH2_KEY` to the value of `App ID` and\
+   `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings tab of your VK app.
 ---
 &nbsp;
 #### 2. Project Creation Steps
@@ -25,14 +24,14 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
   Hereinafter use `Poetry` tool to install python dependencies.
 * Create Django project `todolist`
 * Create a Git repository `Tick-Tick` on GitHub
-* From here on, commit changes into Git as needed
-* Create .gitignore and fill it out yourself or using the appropriate template
-* Setup configuration file:
-  * create `.env` file in project root and fill it with `SECRET_KEY`, `DEBUG` constants according tips in `.env.example` file
-  * reformat `settings.py` to use env vars according this https://django-environ.readthedocs.io/en/latest/quickstart.html
+* From here on, commit changes into Git and push them to remote repository as needed
+* Create `.gitignore` file and fill it out yourself or using the appropriate template
+* Create `.env` file in project root and fill it with `SECRET_KEY`, `DEBUG` constants according tips in `.env.example` file
+* Setup configuration file `settings.py`:
+  * reformat it to use ENV vars according this https://django-environ.readthedocs.io/en/latest/quickstart.html
   * change ALLOWED_HOSTS to `["*"]`
 * Create new app `core` and register it in `settings.py`
-* Create model `User` in `models.py`, inherit it from `AbstractUser` model and put `AUTH_USER_MODEL = 'core.User'` into `settings.py`
+* Add model `User` in `models.py`, inherit it from `AbstractUser` model and put `AUTH_USER_MODEL = 'core.User'` into `settings.py`
 * Setup connection to Postgres:
   * Add Docker container with Postgres to project via `docker-compose.yaml` in projects root
   * Add to `.env` file `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` constants according tips in `.env.example`
@@ -79,12 +78,11 @@ and `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings ta
 * Create a Git branch `auth` and switch to it
 * Add CRUD for User Model:
   * Create custom User Manager
-  * Use Django authentication system from `django.contrib.auth` standard library. \
-  Check `username/password` with `authenticate()` method and return a user instance if it is correct with `login()` method, which are presented in this lib.
-  * Add serializers and endpoints for Register, Login, UserProfile, ChangePassword <sup>*</sup>
+  * Use Django authentication system from `django.contrib.auth` standard library \
+  Check `username/password` with `authenticate()` method and return a user instance if it is correct with `login()` method, which are presented in this lib
+  * Add serializers and endpoints for Register, Login, UserProfile, ChangePassword
 ---
-<sup>*</sup>
-Tips:
+
 1. Inherit `LoginSerializer` from `Serializer` class instead of `ModelSerializer` class \
    in order to prevent an automatic attempt to create an object, even if it exists in the database.
 2. Inherit `UserProfile` endpoint from `RetrieveUpdateDestroyAPIView`, for logging user out \
@@ -101,15 +99,15 @@ Tips:
 * Add URLs entry `path('oauth/', include('social_django.urls', namespace='social'))` to `urls.py` of `todolist` app for social authentication
 * Update frontend image to `doom2/tick-tick-frontend:v2.0` in `docker-compose.yaml` locally and remotely
 * Install `drf_yasg` package to generate Swagger/OpenAPI 2.0 specification from your Django Rest Framework API
-* Test all endpoints via Postman API platform or Swagger tool.
+* Test all endpoints via Postman API platform or Swagger tool
 * Make Pull Request in current feature `auth`, discuss and check its functionality with Team Lead, \
-  then make the necessary changes and merge with the `master` branch.
+  then make the necessary changes and merge with the `master` branch
 * Apply changes on your remote server
 
-###### 2.4 Goals app. The main interface.
+###### 2.4 Goals app. The main interface
 * Create a Git branch `goals` and switch to it
 * Create new app `goals` and register it in `settings.py`
-* Add the following models using ORM: `GoalCategory`, `Goal`, `GoalComment`. Get models specification from Swagger.
+* Add the following models using ORM: `GoalCategory`, `Goal`, `GoalComment`. Hereafter get models specification from [Swagger](http://skypro.oscarbot.ru/swagger/)
 * Implement CRUD for these models using DRF APIViews and Serializers
 * Add an existing models to Django admin site
 * Install `django-filter` package to filter down a queryset based on a model’s fields
@@ -117,8 +115,8 @@ Tips:
 * Add, `OrderingFilter` and `SearchFilter` to realize the ordering and search functionality
 * Apply changes on your remote server
 
-###### 2.5 Goals sharing.
-* Create new models `Board` and `BoardParticipant` to `goals` app. Get models specification from Swagger
+###### 2.5 Goals sharing
+* Create new models `Board` and `BoardParticipant` in `goals` app
 * Add `board` field to `GoalCategory` model as ForeignKey
 * If you already have entries in DB take into account `board` field cannot be null, \
   because each category must refer to the board, so do the following trick:
@@ -137,3 +135,25 @@ Tips:
 * Add category filtering by board
 * Use new version of frontend from here `doom2/tick-tick-frontend:v4.1`
 * Apply changes on your remote server
+
+###### 2.6 Telegram bot
+* Register new telegram bot with BotFather inside Telegram Mobile App
+* Practice receiving notifications from Telegram using [long polling](https://core.telegram.org/bots/api#getupdates). \
+  Send any text to your newly created bot, then perform the following request in browser address line:
+  * `https://api.telegram.org/bot<token>/getUpdates`
+  * `https://api.telegram.org/bot<token>/sendMessage?chat_id=85364161&text=hello` \
+    where `<token>` is personal token of your bot and `chat_id` is field that came in the `Update` object (1st request)
+* Create a Git branch `bot` and switch to it
+* Create new app `bot` and register it in `settings.py`
+* Add model `Bot`  to `bot` app
+* Create python package `tg` inside `bot` folder and make file `bot/tg/dc.py`
+* Describe JSON schema of `Message`, `Update`, `Chat`, `MessageFrom`, `GetUpdatesResponse` and `SendMessageResponse`objects using `data classes`
+* Create `/bot/tg/client.py` and write `TgClient` class that implements the logic of requests to the Telegram API
+* Create custom management command `runbot` and implement simple logic for echo bot responses
+* Realise HTTP-method PATCH method on `/bot/verify` to initialize a telegram user as an authorized user in your app
+* Implement in a file `runbot.py` bot interaction logic displayed in `/Swagger/tg_bot_logic.pdf`
+* Add `bot` section to `docker-compose.yaml`<sup>*</sup> and `build / push` steps to `action.yaml`
+  * Use multi-stage build in `Dockerfile` to be able to execute `runbot` command after starting Django or Gunicorn server
+  * Set the network for the bot service explicitly and attach it to Postgres service
+* Change image with current version of frontend on `doom2/tick-tick-frontend:v5.1`
+* Apply changes on your remote server with CI/CD
