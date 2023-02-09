@@ -85,14 +85,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'todolist.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': env.db('DATABASE_URL'),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -130,7 +128,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
@@ -152,13 +149,15 @@ SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in'
 SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/auth'
 
-
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',  # backend authorization via VK
     'django.contrib.auth.backends.ModelBackend',  # default backend authorization via login & password
+
+    # allow inactive users to login, used to raising an exception if account is not activated
+    'django.contrib.auth.backends.AllowAllUsersModelBackend'
 )
 
 CSRF_TRUSTED_ORIGINS = ['https://tick-tick.ml', 'http://tick-tick.ml']

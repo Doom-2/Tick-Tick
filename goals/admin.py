@@ -4,12 +4,12 @@ from .models import GoalCategory, Goal, GoalComment, Board, BoardParticipant
 
 class GoalCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'created', 'updated')
-    search_fields = ('title', 'user')
+    search_fields = ('title', 'user__username')
 
 
 class GoalAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'description', 'created', 'updated')
-    search_fields = ('title', 'user')
+    search_fields = ('title', 'user__username')
 
 
 class GoalCommentAdmin(admin.ModelAdmin):
@@ -23,7 +23,7 @@ class BoardAdmin(admin.ModelAdmin):
 
 class BoardParticipantAdmin(admin.ModelAdmin):
     list_display = ('board', 'user', 'role', 'created', 'updated')
-    search_fields = ('board', 'user', 'role')
+    search_fields = ('board__title', 'user__username', 'role')
 
 
 admin.site.register(GoalCategory, GoalCategoryAdmin)

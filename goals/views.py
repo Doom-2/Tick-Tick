@@ -47,7 +47,7 @@ class GoalCategoryListView(ListAPIView):
     ]
     filterset_class = CategoryBoardFilter
     ordering_fields = ['title', 'created']
-    ordering = ['-created']
+    ordering = ['created']
     search_fields = ['title']
 
     def get_queryset(self):
@@ -171,7 +171,7 @@ class BoardCreateView(CreateAPIView):
 
 class BoardView(RetrieveUpdateDestroyAPIView):
     model = Board
-    permission_classes = [permissions.IsAuthenticated, BoardPermissions]
+    permission_classes = [BoardPermissions]
     serializer_class = BoardSerializer
 
     def get_queryset(self):
@@ -194,7 +194,6 @@ class BoardListView(ListAPIView):
     serializer_class = BoardListSerializer
     pagination_class = LimitOffsetPagination
     filter_backends = [
-        # DjangoFilterBackend,
         OrderingFilter,
     ]
     ordering = ['-title']

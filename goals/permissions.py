@@ -30,11 +30,8 @@ class CategoryPermissions(permissions.IsAuthenticated):
         return True
 
 
-class GoalPermissions(permissions.BasePermission):
+class GoalPermissions(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj: Goal):
-
-        if not request.user.is_authenticated:
-            return False
 
         if request.method not in permissions.SAFE_METHODS:
             return GoalCategory.objects.filter(board__participants__user=request.user,
@@ -43,11 +40,8 @@ class GoalPermissions(permissions.BasePermission):
         return True
 
 
-class CommentPermissions(permissions.BasePermission):
+class CommentPermissions(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj: GoalComment):
-
-        if not request.user.is_authenticated:
-            return False
 
         if request.method not in permissions.SAFE_METHODS:
             return GoalCategory.objects.filter(board__participants__user=request.user,
