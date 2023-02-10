@@ -1,27 +1,96 @@
+<a name="readme-top"></a>
 # Tick-Tick
 ### ToDo List style app
-### Tech stack - Python 3.10, Django 4.1.4, Postgres 15.0-alpine, Docker Compose
 #### [tick-tick.ml](http://tick-tick.ml)
 
-#### 1. Project start:
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About the project</a>
+      <ul>
+        <li><a href="#techstack">TechStack</a></li>
+        <li><a href="#features">Features</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#project-start">Project start</a>
+    </li>
+    <li>
+      <a href="#step-by-step-project-creation">Step-by-step project creation</a>
+      <ul>
+        <li><a href="#1-initial-setup-db-connection-django-admin">Initial setup, db connection, django-admin</a></li>
+        <li><a href="#2-deploy">Deploy</a></li>
+        <li><a href="#3-authentication">Authentication</a></li>
+        <li><a href="#4-the-main-interface">The main interface</a></li>
+        <li><a href="#5-data-sharing">Data sharing</a></li>
+        <li><a href="#6-telegram-bot">Telegram bot</a></li>
+        <li><a href="#7-testing">Testing</a></li>
+        <li><a href="#8-final">Final</a></li>
+      </ul>
+    </li>
+    <li><a href="#feedback">Feedback</a></li>
+  </ol>
+</details>
+
+---
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+This app will help you get your business in order:
+* define goals
+* sort them by categories
+* organize priorities
+* track deadlines
+* share data
+
+### TechStack
+
+* Django 4
+* Python 3.10
+* PostgreSQL
+* AngularJS
+* Docker
+
+### Features
+
+* Data access permissions
+* OAuth2 authorization via VK
+* Collaborative goal management
+* Search, sorting and filtering data
+* Docker and CI/CD-pipeline usage
+* Telegram user binding functionality
+---
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- PROJECT START -->
+## Project Start
    * Make sure Docker Compose is installed on your local machine
    * Clone repo with `git clone https://github.com/Doom-2/Tick-Tick.git`
    * Rename `.env.example` to `.env` and edit it with your own values
    * Run the following command from the project root `docker compose up --build -d` to run this app
    * Client side (frontend) will be available on `http://localhost`, server side (backend) on `http://localhost:9000`
 
----
-To set up user authentication via OAuth 2.0 and API VK make the following steps:
-1. Create VK app on https://dev.vk.com with `Website` as platform, `http://127.0.0.1` as Website address, `127.0.0.1` as Base domain.
-2. Set the value of `SOCIAL_AUTH_VK_OAUTH2_KEY` to the value of `App ID` and\
+> To set up user authentication via OAuth 2.0 and API VK make the following steps:
+> 1. Create VK app on https://dev.vk.com with `Website` as platform, `http://127.0.0.1` as Website address, `127.0.0.1` as Base domain.
+> 2. Set the value of `SOCIAL_AUTH_VK_OAUTH2_KEY` to the value of `App ID` and\
    `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings tab of your VK app.
 ---
-&nbsp;
-#### 2. Project Creation Steps
-###### 2.1 Initial setup, DB connection, Django admin customization
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- STEP-BY-STEP PROJECT CREATION -->
+## Step-by-step Project Creation
+###### 1. Initial setup, db connection, django-admin
+
 * Create Python Virtual Environment using Poetry
 * Install `django`, `django-environ` and `psycopg2-binary` packages. \
-  Hereinafter use `Poetry` tool to install python dependencies.
+  Hereinafter use `Poetry` tool to install python dependencies
 * Create Django project `todolist`
 * Create a Git repository `Tick-Tick` on GitHub
 * From here on, commit changes into Git and push them to remote repository as needed
@@ -48,7 +117,9 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
   * Hide `password` field
   * Make fields `last_login`, `date_joined` non-editable
 
-###### 2.2 Deploy
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 2. Deploy
 * Create a Git branch 'deploy' and switch to it using command `git switch -c deploy`
 * Add `gunicorn` and `djangorestframework` package
 * Create Dockerfile for Django api in the project root and make sure it can build:
@@ -74,20 +145,22 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
 * Make Pull Request in feature `deploy`, discuss and check its functionality with Team Lead, \
   then make the necessary changes and merge with the `master` branch
 
-###### 2.3 Auth
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 3. Authentication
 * Create a Git branch `auth` and switch to it
 * Add CRUD for User Model:
   * Create custom User Manager
   * Use Django authentication system from `django.contrib.auth` standard library \
   Check `username/password` with `authenticate()` method and return a user instance if it is correct with `login()` method, which are presented in this lib
   * Add serializers and endpoints for Register, Login, UserProfile, ChangePassword
----
 
-1. Inherit `LoginSerializer` from `Serializer` class instead of `ModelSerializer` class \
-   in order to prevent an automatic attempt to create an object, even if it exists in the database.
-2. Inherit `UserProfile` endpoint from `RetrieveUpdateDestroyAPIView`, for logging user out \
-   redefine `delete()` method, where call `logout()` method from `django.contrib.auth` library.
----
+> Inherit `LoginSerializer` from `Serializer` class instead of `ModelSerializer` class \
+in order to prevent an automatic attempt to create an object, even if it exists in the database.
+>
+> Inherit `UserProfile` endpoint from `RetrieveUpdateDestroyAPIView`, for logging user out \
+  redefine `delete()` method, where call `logout()` method from `django.contrib.auth` library.
+
 * Set up user authentication via VK or any other social network using Python Social Auth mechanism for Django projects:
   * Main configuration: https://python-social-auth.readthedocs.io/en/latest/configuration/django.html
   * Backend support for VK: https://python-social-auth.readthedocs.io/en/latest/backends/vk.html
@@ -104,7 +177,9 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
   then make the necessary changes and merge with the `master` branch
 * Apply changes on your remote server
 
-###### 2.4 Goals app. The main interface
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 4. The main interface
 * Create a Git branch `goals` and switch to it
 * Create new app `goals` and register it in `settings.py`
 * Add the following models using ORM: `GoalCategory`, `Goal`, `GoalComment`. Hereafter get models specification from [Swagger](http://skypro.oscarbot.ru/swagger/)
@@ -112,13 +187,15 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
 * Add an existing models to Django admin site
 * Install `django-filter` package to filter down a queryset based on a model’s fields
 * Add `LimitOffsetPagination` to separate web content into discrete pages
-* Add, `OrderingFilter` and `SearchFilter` to realize the ordering and search functionality
+* Add `OrderingFilter` and `SearchFilter` to realize the ordering and search functionality
 * Apply changes on your remote server
 
-###### 2.5 Goals sharing
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 5. Data sharing
 * Create new models `Board` and `BoardParticipant` in `goals` app
 * Add `board` field to `GoalCategory` model as ForeignKey
-* If you already have entries in DB take into account `board` field cannot be null, \
+* If you already have entries in db, take into account `board` field cannot be null, \
   because each category must refer to the board, so do the following trick:
   * temporary mark this field as nullable
   * make migrations
@@ -136,10 +213,12 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
 * Use new version of frontend from here `doom2/tick-tick-frontend:v4.1`
 * Apply changes on your remote server
 
-###### 2.6 Telegram bot
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 6. Telegram bot
 * Register new telegram bot with BotFather inside Telegram Mobile App
 * Practice receiving notifications from Telegram using [long polling](https://core.telegram.org/bots/api#getupdates). \
-  Send any text to your newly created bot, then perform the following request in browser address line:
+  Send any message to your newly created bot, then perform the following request in browser address line:
   * `https://api.telegram.org/bot<token>/getUpdates`
   * `https://api.telegram.org/bot<token>/sendMessage?chat_id=85364161&text=hello` \
     where `<token>` is personal token of your bot and `chat_id` is field that came in the `Update` object (1st request)
@@ -157,3 +236,45 @@ To set up user authentication via OAuth 2.0 and API VK make the following steps:
   * Set the network for the bot service explicitly and attach it to Postgres service
 * Change image with current version of frontend on `doom2/tick-tick-frontend:v5.1`
 * Apply changes on your remote server with CI/CD
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 7. Testing
+* Install pytest-django package
+* Cover project with the following tests:
+  * User `login`,  `profile`, `signup`, `update-password` logic
+  * CRUD functions for `Board`, `GoalCategory`, `Goal`, `GoalComment` models
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+###### 8. Final
+* Document your code according to PEP8 conversations
+* Add type annotations wherever possible
+* Make sure that your project meets the following criteria:
+  * All application methods are completely identical to the reference swagger
+  * Board and Board Participant (owner, writer, reader) functionality works correct
+  * User can only see the information from boards he is participant in
+  * CRUD functions for GoalCategory, Goal, Comment models work correct
+  * Implemented the following functionality:
+    * registration
+    * login / logout
+    * profile obtaining / updating
+    * password change
+    * OAuth2 authorization via VK
+  * CI/CD pipeline is configured:
+    *  `docker-compose.yaml` contains 4 section: `db`, `api`, `frontend`, `bot` that interact with each other properly
+    * `.github/actions/action.yaml` describes build and deploy jobs
+    * each job performs correct and has green status in GitHub `Actions` section
+  * Sensitive data is placed in `.env` which is encoded for third parties
+  * Telegram account is linked to the app user account
+  * Implemented the functionality to view the user's active goals and create new ones
+---
+
+
+<!-- Feedback -->
+## Feedback
+
+###### Executive Programmer: <span style="color:black">Peter Khramov:</span> [phramov945@gmail.com](mailto:phramov945@gmail.com)
+###### Design brief author: <span style="color:black">SkyPro online university:</span> [skypro-support@skyeng.ru](mailto:skypro-support@skyeng.ru)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
