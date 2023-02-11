@@ -58,7 +58,7 @@ services:
     image: doom2/tick-tick-tg-bot:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: on-failure
     env_file:
-      - ./.env
+      - .env
     depends_on:
       db:
         condition: service_healthy
