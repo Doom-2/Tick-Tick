@@ -1,5 +1,5 @@
 <a name="readme-top"></a>
-# Tick-Tick
+# Tick-Tick <img src="/tick-tick-app-logo.png" width="5%" style="position:relative; top:10px;"/>
 ### ToDo List style app
 #### [tick-tick.ml](http://tick-tick.ml)
 
@@ -32,16 +32,15 @@
       </ul>
     </li>
     <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#license">License</a></li>
   </ol>
 </details>
-
----
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This app will help you get your business in order:
+This app will help you get your business in order.
 * define goals
 * sort them by categories
 * organize priorities
@@ -50,11 +49,27 @@ This app will help you get your business in order:
 
 ### TechStack
 
-* Django 4
-* Python 3.10
-* PostgreSQL
-* AngularJS
-* Docker
+[![Python][Python.js]][Python-url] &nbsp;&nbsp;
+[![Django][Django.js]][Django-url] &nbsp;&nbsp;
+[![Postgres][Postgres.js]][Postgres-url] &nbsp;&nbsp;
+[![AngularJS][AngularJS.js]][AngularJS-url] &nbsp;&nbsp;
+[![Docker][Docker.js]][Docker-url]
+
+[Django-url]: https://www.djangoproject.com/
+[Django.js]: https://img.shields.io/badge/Django-darkgreen?style=for-the-badge&logo=django&logoColor=white
+
+[Python-url]: https://www.python.org/
+[Python.js]: https://img.shields.io/badge/Python-174394?style=for-the-badge&logo=python&logoColor=white
+
+[Postgres-url]: https://www.postgresql.org/
+[Postgres.js]: https://img.shields.io/badge/Postgres-737fff?style=for-the-badge&logo=postgresql&logoColor=white
+
+[AngularJS-url]: https://angularjs.org/
+[AngularJS.js]: https://img.shields.io/badge/Angular-ff261e?style=for-the-badge&logo=angularjs&logoColor=white
+
+[Docker-url]: https://www.docker.com/
+[Docker.js]: https://img.shields.io/badge/Docker-4870ff?style=for-the-badge&logo=docker&logoColor=white
+
 
 ### Features
 
@@ -64,7 +79,7 @@ This app will help you get your business in order:
 * Search, sorting and filtering data
 * Docker and CI/CD-pipeline usage
 * Telegram user binding functionality
----
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -80,7 +95,7 @@ This app will help you get your business in order:
 > 1. Create VK app on https://dev.vk.com with `Website` as platform, `http://127.0.0.1` as Website address, `127.0.0.1` as Base domain.
 > 2. Set the value of `SOCIAL_AUTH_VK_OAUTH2_KEY` to the value of `App ID` and\
    `SOCIAL_AUTH_VK_OAUTH2_SECRET` to the value of `Secure key` from Settings tab of your VK app.
----
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -268,13 +283,18 @@ in order to prevent an automatic attempt to create an object, even if it exists 
   * Sensitive data is placed in `.env` which is encoded for third parties
   * Telegram account is linked to the app user account
   * Implemented the functionality to view the user's active goals and create new ones
----
+
 
 
 <!-- Feedback -->
 ## Feedback
 
-###### Executive Programmer: <span style="color:black">Peter Khramov:</span> [phramov945@gmail.com](mailto:phramov945@gmail.com)
+###### Executive programmer: <span style="color:black">Peter Khramov:</span> [phramov945@gmail.com](mailto:phramov945@gmail.com)
 ###### Design brief author: <span style="color:black">SkyPro online university:</span> [skypro-support@skyeng.ru](mailto:skypro-support@skyeng.ru)
+
+
+<!-- License -->
+## License
+Distributed under the MIT License. See LICENSE.txt for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
