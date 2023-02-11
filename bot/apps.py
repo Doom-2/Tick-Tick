@@ -7,5 +7,5 @@ class BotConfig(AppConfig):
     name = 'bot'
 
 
-def ready(self):
+def ready(self) -> None:
     call_command('runbot')
