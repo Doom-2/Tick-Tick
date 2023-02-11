@@ -73,7 +73,7 @@ services:
       target: bot-image
     restart: on-failure
     env_file:
-      - ./.env
+      - .env
     depends_on:
       db:
         condition: service_healthy
