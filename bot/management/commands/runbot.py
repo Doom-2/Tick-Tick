@@ -25,7 +25,7 @@ class Command(BaseCommand):
         self.logger = logging.getLogger(__name__)
         self.logger.info('Bot start polling')
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         offset = 0
         self.logger.info('Waiting for messages from the bot\nPress Ctrl+C to interrupt')
 
