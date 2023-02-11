@@ -52,7 +52,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd Tick-tick
-            echo ${{ secrets.PASSWORD }} | sudo -S docker compose up -d
-            echo ${{ secrets.PASSWORD }} | sudo -S docker exec tick-tick-api-1 \
+            docker compose up -d
+            docker exec tick-tick-api-1 \
             /bin/bash -c "python3 manage.py collectstatic --noinput"
-            echo ${{ secrets.PASSWORD }} | sudo -S docker system prune -a -f
+            docker system prune -a -f
