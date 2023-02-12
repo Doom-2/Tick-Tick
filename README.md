@@ -1,5 +1,5 @@
 <a name="readme-top"></a>
-# Tick-Tick <img src="/tick-tick-app-logo.png" width="5%" style="position:relative; top:10px;"/>
+# Tick-Tick <img src="/tick-tick-app-logo.png" width="5%" style="position:relative; top:5px;"/>
 ### ToDo List style app
 #### [tick-tick.ml](http://tick-tick.ml)
 
